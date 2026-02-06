@@ -8,23 +8,22 @@ public class PlayerMovement : MonoBehaviour
 
     private float horizontal;
     private float speed = 8f;
-    private float jumpHeight = 16f;
+    public float jumpForce = 16f;
+    public float gravityModifier;
     private bool facingRight = true;
-
-    [SerializeField] private Rigidbody2D rb;
+    [SerializeField] private Rigidbody2D playerRb;
     [SerializeField] private Transform GroundCheck;
     [SerializeField] private LayerMask groundLayer;
 
     // Start is called before the first frame update
     void Start()
     {
-
         Flip();
     }
 
     private void FixedUpdate()
     {
-        rb.velocity = new Vector2(horizontal * speed, rb.velocity.y);
+        playerRb.velocity = new Vector2(horizontal * speed, playerRb.velocity.y);
     }
 
     private bool IsGrounded()
@@ -49,14 +48,16 @@ public class PlayerMovement : MonoBehaviour
     void Update()
     {
         horizontal = Input.GetAxisRaw("Horizontal");
-        if (Input.GetButtonDown("Jump") && IsGrounded())
+
+        if (Input.GetKeyDown(KeyCode.Space) && IsGrounded())
         {
-            rb.velocity = new Vector2(rb.velocity.x, jumpHeight);
+            playerRb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
+            playerRb.velocity = new Vector2(playerRb.velocity.x, jumpForce);
         }
 
-        if (Input.GetButtonUp("Jump") && rb.velocity.y > 0f)
+        if (Input.GetKeyUp(KeyCode.Space) && playerRb.velocity.y > 0f)
         {
-            rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y * 0.5f);
+            playerRb.velocity = new Vector2(playerRb.velocity.x, playerRb.velocity.y * 0.5f);
         }
 
     }
