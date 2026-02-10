@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting.ReorderableList;
 using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
@@ -7,10 +8,17 @@ public class PlayerMovement : MonoBehaviour
 {
 
     private float horizontal;
-    private float speed = 8f;
+    public float speed = 8f;
     public float jumpForce = 16f;
-    public float gravityModifier;
+    //public float gravityModifier;
     private bool facingRight = true;
+
+    public bool isJumping = false;
+    public bool isGrounded = true;
+    public int fallMultiplier = 3;
+    public float movingJumpBonus = 2f;
+    
+
     [SerializeField] private Rigidbody2D playerRb;
     [SerializeField] private Transform GroundCheck;
     [SerializeField] private LayerMask groundLayer;
@@ -26,11 +34,20 @@ public class PlayerMovement : MonoBehaviour
         playerRb.velocity = new Vector2(horizontal * speed, playerRb.velocity.y);
     }
 
-    private bool IsGrounded()
+    /*private bool IsGrounded()
     {
         return Physics2D.OverlapCircle(GroundCheck.position, 0.2f, groundLayer);
-    }
+    }*/
 
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        //checking if on the ground or on an animal
+        if (collision.gameObject.CompareTag("Ground") || collision.gameObject.CompareTag("Animal"))
+        {
+            isGrounded = true;
+            isJumping = false;
+        }
+    }
 
     private void Flip()
     {
@@ -49,16 +66,31 @@ public class PlayerMovement : MonoBehaviour
     {
         horizontal = Input.GetAxisRaw("Horizontal");
 
-        if (Input.GetKeyDown(KeyCode.Space) && IsGrounded())
+        //Player Jump
+
+        if (Input.GetKeyDown(KeyCode.Space) && isGrounded && !isJumping)
         {
-            playerRb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
-            playerRb.velocity = new Vector2(playerRb.velocity.x, jumpForce);
+            float extraJump = Mathf.Abs(horizontal) > 0 ? movingJumpBonus : 0f;
+            isJumping = true;
+            isGrounded = false;
+            playerRb.velocity = new Vector2(playerRb.velocity.x, jumpForce + extraJump);
         }
 
-        if (Input.GetKeyUp(KeyCode.Space) && playerRb.velocity.y > 0f)
+        if (Input.GetKeyUp(KeyCode.Space) && playerRb.velocity.y > 0)
         {
             playerRb.velocity = new Vector2(playerRb.velocity.x, playerRb.velocity.y * 0.5f);
         }
+
+        if (playerRb.velocity.y < 0f)
+        {
+            playerRb.velocity += Vector2.up * Physics2D.gravity.y * (fallMultiplier - 1) * Time.deltaTime;
+        }
+
+
+        /*if (Input.GetKeyUp(KeyCode.Space) && playerRb.velocity.y > 0f)
+        {
+            playerRb.velocity = new Vector2(playerRb.velocity.x, playerRb.velocity.y * 0.5f);
+        }*/
 
     }
 }
