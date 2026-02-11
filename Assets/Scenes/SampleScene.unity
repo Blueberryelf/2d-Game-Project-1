@@ -2169,7 +2169,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 6694865697403672567, guid: f0b5bdf3ca39bbd4e8496d336bcea52e, type: 3}
       propertyPath: m_Name
-      value: PalmTree (1)
+      value: PalmTree (2)
       objectReference: {fileID: 0}
     - target: {fileID: 7714908159953533221, guid: f0b5bdf3ca39bbd4e8496d336bcea52e, type: 3}
       propertyPath: m_RootOrder
@@ -4290,7 +4290,7 @@ GameObject:
   - component: {fileID: 1654579658}
   - component: {fileID: 1654579657}
   m_Layer: 0
-  m_Name: Square
+  m_Name: planks
   m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
