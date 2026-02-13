@@ -17,10 +17,13 @@ public class PlayerCarry : MonoBehaviour
 
     private PlayerMovement playerMovement;
 
+    private Animator animator;
+
     // Start is called before the first frame update
     void Start()
     {
         playerMovement = GetComponent<PlayerMovement>();
+        animator = GetComponent<Animator>();
     }
 
     // Update is called once per frame
@@ -28,10 +31,21 @@ public class PlayerCarry : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.J) && playerMovement.isGrounded)
         {
+
+
             if (carriedRb == null)
+            {
+                
                 TryPickup();
+                
+            }
             else
+            {
+                
                 Drop();
+                
+            }
+                
         }
 
         float moveInput = Input.GetAxisRaw("Horizontal");
@@ -47,7 +61,10 @@ public class PlayerCarry : MonoBehaviour
 
     void TryPickup()
     {
+        
         if (carriedObj != null) return;
+
+        
 
         Collider2D hit = Physics2D.OverlapCircle(
             holdPoint.position,
@@ -62,7 +79,7 @@ public class PlayerCarry : MonoBehaviour
         if (animal == null) return;
 
         //block pickup if there is any other object of the same type nearby (stacked)
-        Collider2D[] others = Physics2D.OverlapCircleAll(hit.transform.position, 0.6f, carryLayer);
+        Collider2D[] others = Physics2D.OverlapCircleAll(hit.transform.position, 2f, carryLayer);
         foreach (Collider2D other in others)
         {
             if (other == hit) continue; //skip itself
@@ -83,7 +100,7 @@ public class PlayerCarry : MonoBehaviour
         
         carriedRb.simulated = false;
 
-        
+        animator.SetBool("isCarrying", true);
 
     }
 
@@ -91,6 +108,8 @@ public class PlayerCarry : MonoBehaviour
     {
         
         if (carriedObj == null) return;
+
+        
 
         //determine drop position
         Vector3 dropPos = transform.position;
@@ -104,18 +123,20 @@ public class PlayerCarry : MonoBehaviour
             float topY = hit.bounds.max.y;
             dropPos.y = topY + carriedObj.GetComponent<Collider2D>().bounds.extents.y;
         }
+
+
         
-
-
 
         carriedObj.position = dropPos;
 
         carriedRb.simulated = true;
-        carriedRb.bodyType = RigidbodyType2D.Static;
+        carriedRb.bodyType = RigidbodyType2D.Dynamic;
+        carriedRb.freezeRotation = true;
 
         carriedRb = null;
         carriedObj = null;
-        //carriedCol = null;
+
+        animator.SetBool("isCarrying", false);
     }
 
     private void OnDrawGizmosSelected()
