@@ -4,6 +4,7 @@ MonoImporter:
   externalObjects: {}
   serializedVersion: 2
   defaultReferences:
+  - interactSound: {fileID: 8300000, guid: 0b51463f461ced3448ff20b755d5aa3c, type: 3}
   - backgroundMusic: {fileID: 8300000, guid: 1e1642c5252b96d41a318a19c01a119d, type: 3}
   executionOrder: 0
   icon: {instanceID: 0}
