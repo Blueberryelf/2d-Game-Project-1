@@ -11,6 +11,7 @@ public class PlayerCarry : MonoBehaviour
 
     private Rigidbody2D carriedRb;
     private Transform carriedObj;
+    public int playerScore = 0;
 
     public float lastMoveDir = 1f;
     public float dropDistance = 0.6f;
@@ -18,6 +19,8 @@ public class PlayerCarry : MonoBehaviour
     private PlayerMovement playerMovement;
 
     private Animator animator;
+
+    public GameManager GameManager;
 
     // Start is called before the first frame update
     void Start()
@@ -86,6 +89,7 @@ public class PlayerCarry : MonoBehaviour
             Animals otherAnimal = other.GetComponent<Animals>();
             if (otherAnimal != null && otherAnimal.objectType == animal.objectType)
             {
+                playerScore += 1;
                 return;
             }
         }
@@ -147,4 +151,15 @@ public class PlayerCarry : MonoBehaviour
             Gizmos.DrawWireSphere(transform.position, pickupRadius);
         }
     }
+
+    public void GameOver()
+    {
+        if (playerScore >= 5)
+        {
+            GameManager.GameOver();
+        }
+        
+    }
+
+
 }

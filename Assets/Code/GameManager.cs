@@ -9,6 +9,9 @@ public class GameManager : MonoBehaviour
     private AudioSource audioSource;
     private bool playerNearby = false;
     public AudioClip backgroundMusic;
+    public GameObject gameEndScreen;
+    public int playerScore = 0;
+    
     // Start is called before the first frame update
     void Start()
     {
@@ -41,4 +44,10 @@ public class GameManager : MonoBehaviour
         if (other.CompareTag("Player"))
             playerNearby = false;
     }
+
+    public void GameOver()
+    {
+        gameEndScreen.gameObject.SetActive(true);
+    }
+
 }
