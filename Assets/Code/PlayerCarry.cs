@@ -152,14 +152,4 @@ public class PlayerCarry : MonoBehaviour
         }
     }
 
-    public void GameOver()
-    {
-        if (playerScore >= 5)
-        {
-            GameManager.GameOver();
-        }
-        
-    }
-
-
 }

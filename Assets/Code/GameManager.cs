@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -26,6 +27,13 @@ public class GameManager : MonoBehaviour
         {
             audioSource.PlayOneShot(interactSound);
         }
+
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            SceneManager.LoadSceneAsync(2);
+        }
+
+
     }
 
     public void GamemanagerStart()
@@ -45,9 +53,6 @@ public class GameManager : MonoBehaviour
             playerNearby = false;
     }
 
-    public void GameOver()
-    {
-        gameEndScreen.gameObject.SetActive(true);
-    }
+   
 
 }
